@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 require 'socket'
 
-server = TCPServer.new('0.0.0.0', 12345)
+server = TCPServer.new('0.0.0.0', 22222)
 
 loop do
   socket = server.accept
