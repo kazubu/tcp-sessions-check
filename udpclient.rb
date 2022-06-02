@@ -1,5 +1,6 @@
 #!/usr/bin/env ruby
 
+require 'timeout'
 require 'socket'
 host = ARGV[0]
 
@@ -14,13 +15,19 @@ addr = Socket.pack_sockaddr_in(22222, host)
     udp = UDPSocket.open()
     sockets << udp
 
-    udp.send("#{c}\n", 0, addr)
-    puts udp.gets
+    begin
+      Timeout.timeout(1){
+        udp.send("#{c}\n", 0, addr)
+        puts udp.gets
+      }
+    rescue Timeout::Error
+      puts 'timeout'
+      retry
+    end
   rescue => e
     puts e
     puts 'errored count: ' + c.to_s
     exit -1
   end
-  sleep 0.0025
 }
 
